@@ -7,21 +7,20 @@ from threading import Thread
 from flask import Flask, render_template, redirect, send_from_directory, request
 from flask_wtf import FlaskForm, CSRFProtect
 from telegram import Update
-from wtforms import StringField, TextField
+from wtforms import StringField as TextField
+from wtforms import StringField
 from wtforms.validators import DataRequired
 
-from bot import create_dispatcher, register_handlers
-from highlighter import make_image, get_languages
+from highlighter import make_image, get_languages, make_doczip
 from logic import get_random_bg
 from uploader import gen_name_uniq, UPLOAD_DIR
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = os.environ.get("FLASK_SECRET")
+app = Flask(__name__ , static_folder = 'css')
+#app.config['SECRET_KEY'] = os.environ.get("FLASK_SECRET")
+app.config['SECRET_KEY'] = "FLASK_SECRET"
 TG_TOKEN = os.environ.get("TG_TOKEN")
 csrf = CSRFProtect(app)
 
-bot, queue, dp = create_dispatcher(TG_TOKEN)
-register_handlers(dp)
 
 
 class MyForm(FlaskForm):
@@ -31,7 +30,9 @@ class MyForm(FlaskForm):
 
 @app.route('/')
 def hello_world():
-    return render_template("input.html", languages=get_languages())
+    #languages = get_languages() ## too many
+    languages = ['Transact-SQL', 'MySQL', 'PostgreSQL SQL dialect']
+    return render_template("input.html", languages=languages)
 
 
 @app.route('/upload/<path:filename>')
@@ -47,6 +48,8 @@ def render_code():
     name = gen_name_uniq(5)
     path = os.path.join(UPLOAD_DIR, name + ".jpg")
     make_image(form.code.data, path, form.language.data, background=get_random_bg())
+    print("name, path", name, path)
+    make_doczip(path)
     # upload(path, name, nickname)
     return redirect("/i/" + name)
 
@@ -58,22 +61,6 @@ def custom_static(filename):
         return render_template("image.html", image=filename)
     else:
         return render_template("not_found.html"), 404
-
-
-@app.route('/hook/' + TG_TOKEN, methods=['POST'])
-@csrf.exempt
-def tg_webhook():
-    logging.info("tg_webhook")
-    data = request.get_json(force=True)
-    logging.info(data)
-    update = Update.de_json(data, bot=bot)
-    dp.process_update(update)
-    return "OK"
-
-
-@app.route('/hook/' + TG_TOKEN, methods=['GET'])
-def webhook_get():
-    return redirect("https://telegram.me/links_forward_bot", code=302)
 
 
 if __name__ == '__main__':

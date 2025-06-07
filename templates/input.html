@@ -2,55 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>CodePhoto</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
-          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <script>
-        (adsbygoogle = window.adsbygoogle || []).push({
-            google_ad_client: "ca-pub-3179879053772087",
-            enable_page_level_ads: true
-        });
-    </script>
+    <title>Code Beautifier and sharing</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
 </head>
 <body>
 <div class="container">
     <p></p>
     <div class="jumbotron">
-        <h2 class="display-4">Code Photo
-            <small class="text-muted">by @Tishka17</small>
+        <h2 class="display-4">Microsoft SQL
+            <small class="text-muted">code beautifier and sharing</small>
         </h2>
         <form action="/code" method="post">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <div class="form-group">
                 <select class="form-control" id="language" name="language">
-                    <option value="">(Auto)</option>
+                    <option value="">{{languages.0}}</option>
                     {% for lang in languages %}
                         <option>{{ lang }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="form-group">
-                <textarea class="form-control" name="code" id="code" style="min-height: 500px;"
+                <textarea class="form-control .code" name="code" id="code" style="min-height: 500px;"
                           placeholder="Paste your code here"></textarea>
             </div>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary mb-2">MaKE it bEAuTIful!</button>
+                <button type="submit" class="btn btn-primary mb-2">Submit</button>
             </div>
         </form>
     </div>
 </div>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-16152295-4"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-
-    function gtag() {
-        dataLayer.push(arguments);
-    }
-
-    gtag('js', new Date());
-
-    gtag('config', 'UA-16152295-4');
-</script>
 </body>
 </html>

@@ -5,3 +5,5 @@ flask
 boto3
 Flask-WTF
 python-telegram-bot
+python-docx==1.1.2
+sqlglot

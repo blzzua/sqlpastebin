@@ -1,31 +1,37 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 from PIL import Image
-from PIL import ImageDraw
+from PIL import ImageDraw, ImageFont
 from pygments.formatters.img import ImageFormatter
+import time
 
 
 class Formatter(ImageFormatter):
 
-    def format(self, tokensource, outfile):
-        """
-        Format ``tokensource``, an iterable of ``(tokentype, tokenstring)``
-        tuples and write it into ``outfile``.
+    @staticmethod
+    def textsize(text, font):
+        im = Image.new(mode="P", size=(0, 0))
+        draw = ImageDraw.Draw(im)
+        _, _, width, height = draw.textbbox((0, 0), text=text, font=font)
+        return width, height
 
-        This implementation calculates where it should draw each token on the
-        pixmap, then calculates the required pixmap size and draws the items.
-        """
+    def format(self, tokensource, outfile):
+        ttfont = ImageFont.truetype("Consolas-Regular.ttf", 16)
+        #ttfont = ImageFont.load_path("/home/oleg/pp/codephoto/DejaVuSansMono.ttf")
+        #ttfont = ImageFont.load_default()
+
         self._create_drawables(tokensource)
-        self.maxcharno = 120
-        self.maxlineno = 47
+        self.maxcharno = 1200
+        self.maxlineno = 60
         self._draw_line_numbers()
-        im = Image.new(
-            'RGB',
-            self._get_image_size(self.maxcharno, self.maxlineno),
-            self.background_color
+        self.background_color = '#ffffff'
+        im = Image.new(mode='RGB',
+            size = self._get_image_size(self.maxcharno, self.maxlineno),
+            color = self.background_color
         )
         self._paint_line_number_bg(im)
         draw = ImageDraw.Draw(im)
+        
         # Highlight
         if self.hl_lines:
             x = self.image_pad + self.line_number_width - self.line_number_pad + 1
@@ -35,7 +41,24 @@ class Formatter(ImageFormatter):
                 y = self._get_line_y(linenumber - 1)
                 draw.rectangle([(x, y), (x + rectw, y + recth)],
                                fill=self.hl_color)
-        for pos, value, font, kw in self.drawables:
-            draw.text(pos, value, font=font, **kw)
+        
+        for pos, value, font, _color, kw in self.drawables:
+            if kw is None:
+                kw = {}
+            draw.text(pos, value, fill=_color, font=ttfont)
+            
+##            # Draw a rectangular border around each character
+##            for i, char in enumerate(value):
+##                char_width, char_height = self.textsize(char, font=ttfont)
+##                char_x = pos[0] + i * char_width
+##                char_y = pos[1]
+##                draw.rectangle([(char_x, char_y), (char_x + char_width, char_y + char_height)], outline="black")
 
         self.image = im
+        
+        # debug
+        ## timestamp = int(time.time())
+        ## filename = f'/tmp/filename-{timestamp}.png'
+        ## im.save(filename)
+        ## print(f"Image saved to {filename}")
+
