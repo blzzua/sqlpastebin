@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  web:
+    restart: always
+    build: ./
+    ports:
+      - "11900:11900"
+    expose:
+      - "11900"
+    volumes:
+      - ./upload:/app/upload
+    # env_file: .env
+    environment:
+      DEBUG: 'true'
+    command: /usr/local/bin/gunicorn app:app -w 2 -b :11900
+
