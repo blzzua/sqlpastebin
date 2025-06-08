@@ -16,11 +16,12 @@
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
             <div class="form-group">
                 <select class="form-control" id="language" name="language">
-                    <option value="">{{languages.0}}</option>
                     {% for lang in languages %}
-                        <option>{{ lang }}</option>
+                        <option value="{{ lang }}" {% if lang == selected %}selected{% endif %}>{{ lang }}</option>
                     {% endfor %}
                 </select>
+
+
             </div>
             <div class="form-group">
                 <textarea class="form-control .code" name="code" id="code" style="min-height: 500px;"

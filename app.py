@@ -32,7 +32,8 @@ class MyForm(FlaskForm):
 def hello_world():
     #languages = get_languages() ## too many
     languages = ['Transact-SQL', 'MySQL', 'PostgreSQL SQL dialect']
-    return render_template("input.html", languages=languages)
+    selected_language = languages[0]
+    return render_template("input.html", selected=selected_language, languages=languages)
 
 
 @app.route('/upload/<path:filename>')
