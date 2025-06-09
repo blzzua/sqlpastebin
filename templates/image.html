@@ -3,26 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>Code Beautifier and sharing</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
-          integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/static/css/solarized_dark.css"/>
+    <link rel="stylesheet" type="text/css" href="/static/css/application.css"/>
 
 </head>
 <body>
-<div class="container">
-    <p></p>
-    <div class="jumbotron">
-        <h2 class="display-4">Microsoft SQL Server Studio
-            <small class="text-muted">code sharing</small>
-        </h2>
-        <p>
-            <a href="/" class="btn btn-primary"><i class="fa fa-camera"></i> Take new photo</a>
-            <a href="/upload/{{ image }}.zip?download" class="btn btn-light"><i class="fa fa-download"></i>Share this with phone users <small class="text-muted">(as .docx.zip)</small></a>
-        </p>
 
-        <hr class="my-4">
-        <img class="img-fluid" src="/upload/{{ image }}.jpg">
+<div class="container">
+    <div id="key">
+            <div id="box2">
+                    <a href="/"><button title="Take new photo" class="image function button-picture enabled">New</button></a>
+                    <a href="/upload/{{ image }}.zip?download" class="save function button-picture"><button title="Share this with phone users (as .docx.zip)" class="save function button-picture enabled">Save<div id="pointer" style="display: none;"></div></button></a>
+            </div>
     </div>
-</div>
+    <div class=" hljs-title">
+                <h2>Microsoft SQL Server Studio <small class="hljs-comment">code sharing</small></h2>
+            </div>
+            <img class="img-fluid" src="/upload/{{ image }}.jpg">
+    </div>
 </body>
 </html>
